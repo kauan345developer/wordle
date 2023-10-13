@@ -1,0 +1,88 @@
+:root{
+  --bg-color:#14161c;
+}
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.container{
+  height: 100vh;
+  background-color:var(--bg-color) ;
+}
+
+.container header{
+  border-bottom: 1px solid gray;
+  padding: 1rem;
+}
+
+.container header div{
+  background-color: yellow;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.container main {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  height: 35.125rem ;
+}
+
+.container main .all-lines{
+  display: flex;
+  flex-direction: column;
+}
+
+.container main .all-lines .lines{
+  display: flex;
+}
+
+.container main .all-lines .lines div{
+  border: 1px solid gray;
+  width: 2rem;
+  height: 2rem;
+  margin: .1rem;
+  display: grid;
+  place-items: center;
+  color: white;
+}
+
+.container main .virtual-keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.container main .virtual-keyboard button{
+  border: none;
+  background-color: grey;
+  color: white;
+  padding: .7rem;
+  cursor: pointer;
+}
+
+.correct{
+  background-color: rgb(9, 175, 9);
+}
+
+.empty{
+  background-color: rgb(158, 158, 12);
+}
+
+.wrong{
+  background-color: gray;
+}

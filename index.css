@@ -57,6 +57,7 @@
   display: grid;
   place-items: center;
   color: white;
+  text-transform: uppercase;
 }
 
 .container main .virtual-keyboard {
@@ -76,13 +77,13 @@
 }
 
 .correct{
-  background-color: rgb(9, 175, 9);
+  background-color: rgb(9, 175, 9) !important;
 }
 
 .empty{
-  background-color: rgb(158, 158, 12);
+  background-color: rgb(158, 158, 12) !important;
 }
 
 .wrong{
-  background-color: gray;
+  background-color: gray !important;
 }

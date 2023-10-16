@@ -1,6 +1,13 @@
 const MAX_LETTER_PER_ROW = 5
 const MAX_COLUMN_PER_ROUND = 6
 
+const gameInitialConfig = {
+  currentRow:1,
+  currentLetter:1,
+  actualGuess: "",
+  rightWord:""
+}
+
 function isAphalbetic(key){
   return key.length === 1 && /[A-Za-z]/.test(key)
 }
@@ -27,6 +34,21 @@ function Validkey(key,game,database) {
     
   }
 }
+function getKeyboardKeys(game,database){
+  const keyboardKeys = document.querySelectorAll(".charKey")
+  keyboardKeys.forEach((ev) => ev.addEventListener("click",(ev) => 
+  { if(isEnter(ev.target.dataset.word)){
+    pressEnter(game,database)
+  }
+  else if (isBackSpace(ev.target.dataset.word)){
+    removeLetterFromtheBoard(game)
+  }
+  else if(isAphalbetic(ev.target.dataset.word)){
+    putLetterOnTheBoard(ev.target.dataset.word,game)}
+  }))
+  
+}
+
 
 function getGameLetterFromBoard(currentLetter,currentRow){
   return document.querySelector(`.all-lines .line-${currentRow} .letter-${currentLetter}`)
@@ -80,21 +102,23 @@ function pressEnter(game,database){
   return alert("esta palvra não existe")
 }
   
+  if(rightGuess(game)){
+    putColor(game)
+    
+    return setTimeout(() => alert("voce ganhou")) 
+  }
+
   putColor(game)
 
   
+
 }
 
 function rightGuess(game){
   return game.actualGuess === game.rightWord
 }
 
-const gameInitialConfig = {
-  currentRow:1,
-  currentLetter:1,
-  actualGuess: "",
-  rightWord:""
-}
+
 
 function getRandomWord(words){
     const RamdomIndex = Math.floor(Math.random() * words.length)
@@ -111,19 +135,41 @@ async function loadWords(){
 function putColor(game){
 
   const {currentRow,rightWord,actualGuess} = game
-  
+  const keyboard = document.querySelectorAll(".charKey")
+
   for (let index = 0; index < MAX_LETTER_PER_ROW ; index++) {
     const element = getGameLetterFromBoard(index+1,currentRow)
+
     if(actualGuess[index] === rightWord[index]){
       element.classList.add("correct")
+      const letter = actualGuess[index]
+
+      keyboard.forEach((param) => {
+        if(param.dataset.word === letter){
+          param.classList.remove("empty")
+          param.classList.add("correct")
+        }
+      })
     }  
     else if(rightWord.includes(actualGuess[index])){
+      const letter = actualGuess[index]
       element.classList.add("empty")
+
+      keyboard.forEach((param) => {
+        if(param.dataset.word === letter){
+          param.classList.remove("correct")
+          param.classList.add("empty")
+        }
+      })
     }
     else{
       element.classList.add("wrong")
     }
+
   }
+
+  
+
   console.log(game.actualGuess)
   game.currentRow++
   game.currentLetter = 1
@@ -137,6 +183,7 @@ window.onload = async () => {
   console.log(chosenWord)
   gameInitialConfig.rightWord = chosenWord
   document.addEventListener('keydown',(ev) => Validkey(ev.key, gameInitialConfig,database))
+  getKeyboardKeys(gameInitialConfig,database)
 }
 
 

@@ -168,8 +168,6 @@ function putColor(game){
 
   }
 
-  
-
   console.log(game.actualGuess)
   game.currentRow++
   game.currentLetter = 1

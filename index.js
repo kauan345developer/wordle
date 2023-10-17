@@ -1,5 +1,8 @@
 const MAX_LETTER_PER_ROW = 5
 const MAX_COLUMN_PER_ROUND = 6
+const BtnReset = document.getElementById("BtnReset")
+
+let end = false
 
 const gameInitialConfig = {
   currentRow:1,
@@ -21,7 +24,10 @@ function isEnter(key){
 }
 
 function Validkey(key,game,database) {
-  if(isAphalbetic(key)){
+  if (end) {
+    return
+  }
+  else if(isAphalbetic(key)){
     putLetterOnTheBoard(key,game)
   }
   else if (isBackSpace(key)){
@@ -31,13 +37,17 @@ function Validkey(key,game,database) {
     pressEnter(game,database)
   }
   else{
-    
+    return console.log("tecla invlaida")
   }
 }
 function getKeyboardKeys(game,database){
   const keyboardKeys = document.querySelectorAll(".charKey")
   keyboardKeys.forEach((ev) => ev.addEventListener("click",(ev) => 
-  { if(isEnter(ev.target.dataset.word)){
+  { 
+  if(end){
+    return
+  }
+   else if(isEnter(ev.target.dataset.word)){
     pressEnter(game,database)
   }
   else if (isBackSpace(ev.target.dataset.word)){
@@ -49,6 +59,7 @@ function getKeyboardKeys(game,database){
   
 }
 
+BtnReset.addEventListener("click",)
 
 function getGameLetterFromBoard(currentLetter,currentRow){
   return document.querySelector(`.all-lines .line-${currentRow} .letter-${currentLetter}`)
@@ -104,7 +115,7 @@ function pressEnter(game,database){
   
   if(rightGuess(game)){
     putColor(game)
-    
+    end = true
     return setTimeout(() => alert("voce ganhou")) 
   }
 
@@ -117,8 +128,6 @@ function pressEnter(game,database){
 function rightGuess(game){
   return game.actualGuess === game.rightWord
 }
-
-
 
 function getRandomWord(words){
     const RamdomIndex = Math.floor(Math.random() * words.length)
@@ -175,7 +184,7 @@ function putColor(game){
 }
 
 
-window.onload = async () => {
+const start = async () => {
   const database  = await loadWords()
   const chosenWord = getRandomWord(database)
   console.log(chosenWord)
@@ -184,5 +193,4 @@ window.onload = async () => {
   getKeyboardKeys(gameInitialConfig,database)
 }
 
-
-
+start()

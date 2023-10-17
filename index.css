@@ -11,7 +11,7 @@
 }
 
 .container{
-  height: 100vh;
+  height: 100%;
   background-color:var(--bg-color) ;
 }
 
@@ -86,4 +86,13 @@
 
 .wrong{
   background-color: gray !important;
+}
+
+.container #BtnReset{
+  padding: 1rem;
+  border-radius: 5px;
+  color: white;
+  background-color: rgba(177, 177, 26, 0.87);
+  border: none;
+  font-weight: bold;
 }

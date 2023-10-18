@@ -23,7 +23,7 @@ function isEnter(key){
   return key === "Enter"
 }
 
-function Validkey(key,game,database) {
+function Validkey(key,game) {
   if (end) {
     return
   }
@@ -34,13 +34,13 @@ function Validkey(key,game,database) {
     removeLetterFromtheBoard(game)
   }
   else if(isEnter(key)){
-    pressEnter(game,database)
+    pressEnter(game,game.database)
   }
   else{
     return console.log("tecla invlaida")
   }
 }
-function getKeyboardKeys(game,database){
+function getKeyboardKeys(game){
   const keyboardKeys = document.querySelectorAll(".charKey")
   keyboardKeys.forEach((ev) => ev.addEventListener("click",(ev) => 
   { 
@@ -48,7 +48,7 @@ function getKeyboardKeys(game,database){
     return
   }
    else if(isEnter(ev.target.dataset.word)){
-    pressEnter(game,database)
+    pressEnter(game,game.database)
   }
   else if (isBackSpace(ev.target.dataset.word)){
     removeLetterFromtheBoard(game)
@@ -59,7 +59,32 @@ function getKeyboardKeys(game,database){
   
 }
 
-BtnReset.addEventListener("click",)
+const reset = (game) => {
+  BtnReset.addEventListener("click",() => {
+  document.querySelectorAll(".lines div").forEach((ev) => {
+    ev.textContent = ""
+ 
+    ev.classList.remove("correct")
+    ev.classList.remove("empty")
+    ev.classList.remove("wrong")
+  })
+
+  game.rightWord = getRandomWord(game.database)
+
+  game.currentRow = 1
+  game.currentLetter=1
+  game.actualGuess = ""
+
+  console.log(game.rightWord)
+
+  document.querySelectorAll(".charKey").forEach((ev) => {
+    ev.classList.remove("correct")
+    ev.classList.remove("empty")
+    
+  })
+  BtnReset.style.display = "none"
+  end = false
+})}
 
 function getGameLetterFromBoard(currentLetter,currentRow){
   return document.querySelector(`.all-lines .line-${currentRow} .letter-${currentLetter}`)
@@ -93,7 +118,7 @@ function removeLetterFromtheBoard(game){
   }
 }
 
- function worldInDatabase(game,database){
+function worldInDatabase(game,database){
   return database.includes(game.actualGuess.toLowerCase())
 }
 
@@ -116,7 +141,8 @@ function pressEnter(game,database){
   if(rightGuess(game)){
     putColor(game)
     end = true
-    return setTimeout(() => alert("voce ganhou")) 
+    setTimeout(() => alert("voce ganhou"))
+    return BtnReset.style.display = "block"
   }
 
   putColor(game)
@@ -187,10 +213,12 @@ function putColor(game){
 const start = async () => {
   const database  = await loadWords()
   const chosenWord = getRandomWord(database)
-  console.log(chosenWord)
-  gameInitialConfig.rightWord = chosenWord
-  document.addEventListener('keydown',(ev) => Validkey(ev.key, gameInitialConfig,database))
-  getKeyboardKeys(gameInitialConfig,database)
+  const rightWord = chosenWord
+  const game = {...gameInitialConfig,database,rightWord}
+  console.log(game)
+  document.addEventListener('keydown',(ev) => Validkey(ev.key, game))
+  getKeyboardKeys(game)
+  reset(game)
 }
 
 start()
